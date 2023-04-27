@@ -21,6 +21,6 @@ namespace Event.Domain.Entities
         public DateTime EventDate { get; set; }
 
         /// <summary> Статус проведения мероприятия. </summary>
-        public StatusEnum Status { get; set; }
+        public StatusType Status { get; set; }
     }
 }

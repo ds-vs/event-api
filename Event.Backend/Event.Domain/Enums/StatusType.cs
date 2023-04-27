@@ -3,7 +3,7 @@
     /// <summary> 
     /// Перечисление статусов, отображающих актуальность проводимого мероприятия. 
     /// </summary>
-    public enum StatusEnum
+    public enum StatusType : int
     {
         Actual = 0,
         Completed = 1,
