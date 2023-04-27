@@ -4,6 +4,9 @@ using System.Net;
 
 namespace Event.API.Controllers
 {
+    /// <summary>
+    /// Контроллер, работающий с EventService.
+    /// </summary>
     [Route("api/")]
     [ApiController]
     public class EventController : ControllerBase
@@ -15,9 +18,8 @@ namespace Event.API.Controllers
             _eventService = eventService;
         }
 
-        /// <summary> 
+        /// <summary> Получить информацию о всех актуальных мероприятиях. </summary>
         /// <remarks> Пример запроса: GET api/event/all. </remarks> 
-        /// </summary>
         /// <returns> Все актуальные мероприятия. </returns>
         [HttpGet]
         [Route("event/all")]
