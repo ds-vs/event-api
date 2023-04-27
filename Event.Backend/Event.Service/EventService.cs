@@ -1,4 +1,5 @@
-﻿using Event.Domain;
+﻿using System.Net;
+using Event.Domain;
 using Event.Domain.Entities;
 using Event.Domain.Enums;
 using Event.Domain.Repositories.Interfaces;
@@ -26,7 +27,7 @@ namespace Event.Service
                 return new Response<IEnumerable<EventEntity>>()
                 {
                     Data = events,
-                    Status = ResponseCode.OK,
+                    Status = HttpStatusCode.OK,
                 };
             }
             catch (Exception e)
@@ -34,7 +35,7 @@ namespace Event.Service
                 return new Response<IEnumerable<EventEntity>>()
                 {
                     Description = $"[Get] : {e.Message}",
-                    Status = ResponseCode.InternalServerError
+                    Status = HttpStatusCode.InternalServerError,
                 };
             }
         }

@@ -1,6 +1,6 @@
 using Event.DAL;
 using Event.DAL.Repositories;
-using Event.DAL.Repositories.Interfaces;
+using Event.Domain.Repositories.Interfaces;
 using Event.Service;
 using Event.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
