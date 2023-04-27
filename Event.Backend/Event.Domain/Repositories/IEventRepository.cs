@@ -1,6 +1,6 @@
 ﻿using Event.Domain.Entities;
 
-namespace Event.DAL.Repositories.Interfaces
+namespace Event.Domain.Repositories.Interfaces
 {
     /// <summary> Интерфейс репозитория для <see cref="EventEntity"/>. </summary>
     public interface IEventRepository

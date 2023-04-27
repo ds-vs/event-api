@@ -1,5 +1,5 @@
-﻿using Event.DAL.Repositories.Interfaces;
-using Event.Domain.Entities;
+﻿using Event.Domain.Entities;
+using Event.Domain.Repositories.Interfaces;
 
 namespace Event.DAL.Repositories
 {

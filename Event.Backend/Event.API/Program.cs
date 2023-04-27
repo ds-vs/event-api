@@ -1,5 +1,8 @@
 using Event.DAL;
-
+using Event.DAL.Repositories;
+using Event.DAL.Repositories.Interfaces;
+using Event.Service;
+using Event.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +17,10 @@ builder.Services.AddDbContext<EventDbContext>(options =>
 {
     options.UseNpgsql(connectionString);
 });
+
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+
+builder.Services.AddScoped<IEventService, EventService>();
 
 var app = builder.Build();
 
