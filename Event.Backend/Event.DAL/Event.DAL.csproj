@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Event.Service\Event.Service.csproj" />
+  </ItemGroup>
+
 </Project>
