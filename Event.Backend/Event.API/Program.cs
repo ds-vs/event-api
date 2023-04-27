@@ -1,4 +1,5 @@
 using Event.DAL;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
