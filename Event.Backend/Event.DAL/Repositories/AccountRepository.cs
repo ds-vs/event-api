@@ -24,6 +24,7 @@ namespace Event.DAL.Repositories
         public async Task<AccountEntity> GetAsync(string login)
         {
             var entity = await _context.Account
+                .Include(x => x.Role)
                 .FirstOrDefaultAsync(entity => entity.Login == login);
 
             return entity!;

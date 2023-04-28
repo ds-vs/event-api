@@ -8,6 +8,7 @@ namespace Event.DAL
     {
         public DbSet<EventEntity> Events { get; set; }
         public DbSet<AccountEntity> Account { get; set; }
+        public DbSet<RoleEntity> Roles { get; set; }
 
         public EventDbContext(DbContextOptions<EventDbContext> options) 
             : base(options) { }
@@ -15,7 +16,9 @@ namespace Event.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new EventConfiguration());
+
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

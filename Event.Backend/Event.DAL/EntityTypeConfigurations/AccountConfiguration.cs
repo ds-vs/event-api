@@ -9,7 +9,7 @@ namespace Event.DAL.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<AccountEntity> builder)
         {
-            builder.ToTable(name: "account");
+            builder.ToTable(name: "accounts");
 
             builder.HasKey(keyExpression: e => e.AccountId);
 
@@ -36,6 +36,15 @@ namespace Event.DAL.EntityTypeConfigurations
                 .HasMaxLength(maxLength: 60)
                 .HasColumnType(typeName: "text")
                 .IsRequired();
+
+            builder.Property(propertyExpression: e => e.RoleId)
+                .HasColumnName(name: "role_id")
+                .HasColumnType(typeName: "int")
+                .IsRequired();
+
+            builder.HasOne(e => e.Role)
+                .WithMany(r => r.Accounts)
+                .HasForeignKey(e => e.RoleId);
         }
     }
 }

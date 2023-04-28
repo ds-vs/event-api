@@ -34,6 +34,7 @@ namespace Event.Service
                     Login = account.Login,
                     Email = account.Email,
                     PasswordHash = passwordHash,
+                    RoleId = account.RoleId,
                 };
 
                 await _accountRepository.CreateAsync(accountEntity);
@@ -103,6 +104,7 @@ namespace Event.Service
             {
                 new Claim(ClaimTypes.Name, account.Login),
                 new Claim(ClaimTypes.Email, account.Email),
+                new Claim(ClaimTypes.Role, account.Role.Name)
             };
 
             var key = new SymmetricSecurityKey
