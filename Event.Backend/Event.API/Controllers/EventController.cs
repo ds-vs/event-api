@@ -1,4 +1,5 @@
 ﻿using Event.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -21,7 +22,7 @@ namespace Event.API.Controllers
         /// <summary> Получить информацию о всех актуальных мероприятиях. </summary>
         /// <remarks> Пример запроса: GET api/event/all. </remarks> 
         /// <returns> Все актуальные мероприятия. </returns>
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Member")]
         [Route("event/all")]
         public IActionResult GetEvents()
         {
