@@ -20,14 +20,26 @@ namespace Event.API.Controllers
 
         [HttpPost]
         [Route("account/register")]
-        public async Task<IActionResult> RegisterAsync(AccountDto account)
+        public async Task<IActionResult> RegisterAsync(AccountDto request)
         {
-            var response = await _accountService.RegisterAsync(account);
+            var response = await _accountService.RegisterAsync(request);
 
             if (response.Status == HttpStatusCode.OK)
-                return Ok("Account created successfully.");
+                return Ok(response.Description);
 
             return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("account/login")]
+        public async Task<IActionResult> LoginAsync(AccountDto request)
+        {
+            var response = await _accountService.LoginAsync(request);
+
+            if (response.Status == HttpStatusCode.OK)
+                return Ok(response.Data);
+
+            return BadRequest(response.Description);
         }
     }
 }

@@ -8,5 +8,6 @@ namespace Event.Service.Interfaces
     public interface IAccountService
     {
         Task<IResponse<AccountDto>> RegisterAsync(AccountDto account);
+        Task<IResponse<string>> LoginAsync(AccountDto account);
     }
 }

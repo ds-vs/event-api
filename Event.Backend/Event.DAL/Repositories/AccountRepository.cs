@@ -1,5 +1,6 @@
 ﻿using Event.Domain.Entities;
 using Event.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event.DAL.Repositories
 {
@@ -18,6 +19,14 @@ namespace Event.DAL.Repositories
             await _context.SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task<AccountEntity> GetAsync(string login)
+        {
+            var entity = await _context.Account
+                .FirstOrDefaultAsync(entity => entity.Login == login);
+
+            return entity!;
         }
     }
 }
