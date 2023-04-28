@@ -16,13 +16,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1",
         new OpenApiInfo
         {
-            Title = "API для автоматизации организации мероприятий",
+            Title = "Event API",
             Version = "v1",
-            Contact = new OpenApiContact
-            {
-                Name = "Владислав Костин",
-                Email = "kostin@ds-vs.ru"
-            }
         });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
