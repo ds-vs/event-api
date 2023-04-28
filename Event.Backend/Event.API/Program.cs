@@ -1,5 +1,6 @@
 using Event.DAL;
 using Event.DAL.Repositories;
+using Event.Domain.Repositories;
 using Event.Domain.Repositories.Interfaces;
 using Event.Service;
 using Event.Service.Interfaces;
@@ -34,8 +35,10 @@ builder.Services.AddDbContext<EventDbContext>(options =>
 });
 
 builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 

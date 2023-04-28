@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Event.Service\Event.Service.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>
