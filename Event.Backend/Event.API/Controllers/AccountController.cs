@@ -23,7 +23,7 @@ namespace Event.API.Controllers
         /// <returns> Сообщение о создании учетной записи. </returns>
         [HttpPost]
         [Route("account/register")]
-        public async Task<IActionResult> RegisterAsync(AccountDto request)
+        public async Task<IActionResult> RegisterAsync(RegisterAccountDto request)
         {
             var response = await _accountService.RegisterAsync(request);
 
@@ -38,7 +38,7 @@ namespace Event.API.Controllers
         /// <returns> Токен. </returns>
         [HttpPost]
         [Route("account/login")]
-        public async Task<IActionResult> LoginAsync(AccountDto request)
+        public async Task<IActionResult> LoginAsync(LoginAccountDto request)
         {
             var response = await _accountService.LoginAsync(request);
 

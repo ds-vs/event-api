@@ -23,7 +23,7 @@ namespace Event.Service
             _configuration = configuration;
         }
 
-        public async Task<IResponse<AccountDto>> RegisterAsync(AccountDto account)
+        public async Task<IResponse<RegisterAccountDto>> RegisterAsync(RegisterAccountDto account)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace Event.Service
 
                 await _accountRepository.CreateAsync(accountEntity);
 
-                return new Response<AccountDto>()
+                return new Response<RegisterAccountDto>()
                 {
                     Description = "Account created successfully.",
                     Status = HttpStatusCode.OK,
@@ -46,7 +46,7 @@ namespace Event.Service
             }
             catch (Exception e)
             {
-                return new Response<AccountDto>()
+                return new Response<RegisterAccountDto>()
                 {
                     Status = HttpStatusCode.InternalServerError,
                     Description = $"[RegisterAsync] : {e.Message}",
@@ -54,7 +54,7 @@ namespace Event.Service
             }
         }
 
-        public async Task<IResponse<string>> LoginAsync(AccountDto account)
+        public async Task<IResponse<string>> LoginAsync(LoginAccountDto account)
         {
             try
             {
