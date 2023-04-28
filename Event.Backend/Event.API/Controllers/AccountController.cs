@@ -18,6 +18,9 @@ namespace Event.API.Controllers
             _accountService = accountService;
         }
 
+        /// <summary> Создать учетную запись пользователя. </summary>
+        /// <remarks> Пример запроса: POST api/account/register. </remarks> 
+        /// <returns> Сообщение о создании учетной записи. </returns>
         [HttpPost]
         [Route("account/register")]
         public async Task<IActionResult> RegisterAsync(AccountDto request)
@@ -30,6 +33,9 @@ namespace Event.API.Controllers
             return BadRequest();
         }
 
+        /// <summary> Сгенерировать токен для учетной записи пользователя. </summary>
+        /// <remarks> Пример запроса: POST api/account/login. </remarks> 
+        /// <returns> Токен. </returns>
         [HttpPost]
         [Route("account/login")]
         public async Task<IActionResult> LoginAsync(AccountDto request)
