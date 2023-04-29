@@ -3,6 +3,7 @@ using System;
 using Event.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Event.DAL.Migrations
 {
     [DbContext(typeof(EventDbContext))]
-    partial class EventDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230428201631_Add_Role_Table")]
+    partial class Add_Role_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,22 +51,9 @@ namespace Event.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
 
-                    b.Property<string>("RefreshToken")
-                        .HasMaxLength(64)
-                        .HasColumnType("text")
-                        .HasColumnName("refresh_token");
-
                     b.Property<int>("RoleId")
                         .HasColumnType("int")
                         .HasColumnName("role_id");
-
-                    b.Property<DateTime?>("TokenCreated")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("token_created");
-
-                    b.Property<DateTime?>("TokenExpires")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("token_expires");
 
                     b.HasKey("AccountId");
 

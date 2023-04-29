@@ -3,6 +3,7 @@ using System;
 using Event.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Event.DAL.Migrations
 {
     [DbContext(typeof(EventDbContext))]
-    partial class EventDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230428160644_Add_Account_Table")]
+    partial class Add_Account_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,28 +51,9 @@ namespace Event.DAL.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
 
-                    b.Property<string>("RefreshToken")
-                        .HasMaxLength(64)
-                        .HasColumnType("text")
-                        .HasColumnName("refresh_token");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int")
-                        .HasColumnName("role_id");
-
-                    b.Property<DateTime?>("TokenCreated")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("token_created");
-
-                    b.Property<DateTime?>("TokenExpires")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("token_expires");
-
                     b.HasKey("AccountId");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("accounts", (string)null);
+                    b.ToTable("account", (string)null);
                 });
 
             modelBuilder.Entity("Event.Domain.Entities.EventEntity", b =>
@@ -111,48 +95,6 @@ namespace Event.DAL.Migrations
                     b.HasKey("EventId");
 
                     b.ToTable("events", (string)null);
-                });
-
-            modelBuilder.Entity("Event.Domain.Entities.RoleEntity", b =>
-                {
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("role_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("RoleId"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("RoleId");
-
-                    b.ToTable("roles", (string)null);
-                });
-
-            modelBuilder.Entity("Event.Domain.Entities.AccountEntity", b =>
-                {
-                    b.HasOne("Event.Domain.Entities.RoleEntity", "Role")
-                        .WithMany("Accounts")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Event.Domain.Entities.RoleEntity", b =>
-                {
-                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }
