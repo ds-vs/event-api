@@ -28,23 +28,36 @@ namespace Event.Service
         {
             try
             {
-                var passwordHash = BCrypt.Net.BCrypt.HashPassword(account.Password);
+                var duplicateAccount = await _accountRepository.GetAsync(account.Login);
 
-                var accountEntity = new AccountEntity()
+                if (duplicateAccount == null)
                 {
-                    Login = account.Login,
-                    Email = account.Email,
-                    PasswordHash = passwordHash,
-                    RoleId = account.RoleId,
-                };
+                    var passwordHash = BCrypt.Net.BCrypt.HashPassword(account.Password);
 
-                await _accountRepository.CreateAsync(accountEntity);
+                    var accountEntity = new AccountEntity()
+                    {
+                        Login = account.Login,
+                        Email = account.Email,
+                        PasswordHash = passwordHash,
+                        RoleId = account.RoleId,
+                    };
 
-                return new Response<RegisterAccountDto>()
+                    await _accountRepository.CreateAsync(accountEntity);
+
+                    return new Response<RegisterAccountDto>()
+                    {
+                        Description = "Account created successfully.",
+                        Status = HttpStatusCode.OK,
+                    };
+                }
+                else
                 {
-                    Description = "Account created successfully.",
-                    Status = HttpStatusCode.OK,
-                };
+                    return new Response<RegisterAccountDto>()
+                    {
+                        Description = "Account exist.",
+                        Status = HttpStatusCode.OK,
+                    };
+                }
             }
             catch (Exception e)
             {
