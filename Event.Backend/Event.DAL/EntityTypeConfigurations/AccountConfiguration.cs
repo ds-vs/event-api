@@ -37,6 +37,19 @@ namespace Event.DAL.EntityTypeConfigurations
                 .HasColumnType(typeName: "text")
                 .IsRequired();
 
+            builder.Property(propertyExpression: e => e.RefreshToken)
+                .HasColumnName(name: "refresh_token")
+                .HasMaxLength(maxLength: 64)
+                .HasColumnType(typeName: "text");
+
+            builder.Property(propertyExpression: e => e.TokenCreated)
+                .HasColumnName(name: "token_created")
+                .HasColumnType(typeName: "timestamp without time zone");
+
+            builder.Property(propertyExpression: e => e.TokenExpires)
+                .HasColumnName(name: "token_expires")
+                .HasColumnType(typeName: "timestamp without time zone");
+
             builder.Property(propertyExpression: e => e.RoleId)
                 .HasColumnName(name: "role_id")
                 .HasColumnType(typeName: "int")

@@ -20,5 +20,9 @@
 
         /// <summary> Поле для связи One to many. </summary>
         public RoleEntity Role { get; set; }
+
+        public string? RefreshToken { get; set; } = string.Empty;
+        public DateTime? TokenCreated { get; set; }
+        public DateTime? TokenExpires { get; set; }
     }
 }

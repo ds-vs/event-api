@@ -6,5 +6,6 @@ namespace Event.Domain.Repositories
     {
         Task<AccountEntity> CreateAsync(AccountEntity entity);
         Task<AccountEntity> GetAsync(string login);
+        Task UpdateAsync(AccountEntity entity);
     }
 }

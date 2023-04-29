@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Event.Domain;
 using Event.Domain.Dto.Account;
@@ -19,7 +20,7 @@ namespace Event.Service
 
         public AccountService(IAccountRepository accountRepository, IConfiguration configuration)
         {
-            _accountRepository = accountRepository;
+            _accountRepository= accountRepository;
             _configuration = configuration;
         }
 
@@ -55,7 +56,7 @@ namespace Event.Service
             }
         }
 
-        public async Task<IResponse<string>> LoginAsync(LoginAccountDto account)
+        public async Task<IResponse<TokenDto>> LoginAsync(LoginAccountDto account)
         {
             try
             {
@@ -63,7 +64,7 @@ namespace Event.Service
 
                 if (entity == null)
                 {
-                    return new Response<string>()
+                    return new Response<TokenDto>()
                     {
                         Description = "Account not found.",
                         Status = HttpStatusCode.NotFound,
@@ -72,7 +73,7 @@ namespace Event.Service
 
                 if (!BCrypt.Net.BCrypt.Verify(account.Password, entity.PasswordHash))
                 {
-                    return new Response<string>()
+                    return new Response<TokenDto>()
                     {
                         Description = "Wrong password.",
                         Status = HttpStatusCode.NotFound,
@@ -81,19 +82,117 @@ namespace Event.Service
 
                 string token = CreateToken(entity);
 
-                return new Response<string>()
+                var refreshToken = GenerateRefreshToken();
+
+                entity.RefreshToken = refreshToken.Token;
+                entity.TokenCreated = refreshToken.Created;
+                entity.TokenExpires = refreshToken.Expires;
+
+                await _accountRepository.UpdateAsync(entity);
+
+                return new Response<TokenDto>()
                 {
-                    Data = token,
+                    Data = new TokenDto()
+                    {
+                        Token = token,
+                        RefreshToken = refreshToken.Token,
+                        TokenExpires = refreshToken.Expires
+                    },
                     Description = "Success.",
                     Status = HttpStatusCode.OK,
                 };
             }
             catch (Exception e)
             {
-                return new Response<string>()
+                return new Response<TokenDto>()
                 {
                     Status = HttpStatusCode.InternalServerError,
                     Description = $"[LoginAsync] : {e.Message}",
+                };
+            }
+        }
+
+        public async Task<IResponse<TokenDto>> GetRefreshTokenAsync(string login)
+        {
+            try
+            {
+                var entity = await _accountRepository.GetAsync(login);
+
+                if (entity == null)
+                {
+                    return new Response<TokenDto>()
+                    {
+                        Description = "Account not found.",
+                        Status = HttpStatusCode.NotFound,
+                    };
+                }
+
+                return new Response<TokenDto>()
+                {
+                    Data = new TokenDto()
+                    {
+                        RefreshToken = entity.RefreshToken!,
+                        TokenExpires = entity.TokenExpires,
+                    },
+                    Description = "Success.",
+                    Status = HttpStatusCode.OK,
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<TokenDto>()
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Description = $"[RefreshTokenAsync] : {e.Message}",
+                };
+            }
+        }
+
+        public async Task<IResponse<TokenDto>> NewRefreshTokenAsync(string login)
+        {
+            try
+            {
+                var entity = await _accountRepository.GetAsync(login);
+
+                if (entity == null)
+                {
+                    return new Response<TokenDto>()
+                    {
+                        Description = "Account not found.",
+                        Status = HttpStatusCode.NotFound,
+                    };
+                }
+
+                string token = CreateToken(entity);
+
+                // Генерация нового токена.
+                var newRefreshToken = GenerateRefreshToken();
+
+                entity.RefreshToken = newRefreshToken.Token;
+                entity.TokenCreated = newRefreshToken.Created;
+                entity.TokenExpires = newRefreshToken.Expires;
+
+                // Обновление хранимого токена в БД.
+                await _accountRepository.UpdateAsync(entity);
+
+                return new Response<TokenDto>()
+                {
+                    Data = new TokenDto()
+                    {
+                        Token = token,
+                        RefreshToken = newRefreshToken.Token,
+                        TokenExpires = newRefreshToken.Expires,
+                    },
+                    Description = "Success.",
+                    Status = HttpStatusCode.OK,
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<TokenDto>()
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Description = $"[NewRefreshTokenAsync] : {e.Message}",
                 };
             }
         }
@@ -120,7 +219,7 @@ namespace Event.Service
             var token = new JwtSecurityToken
                 (
                     claims: claims,
-                    expires: DateTime.Now.AddDays(3),
+                    expires: DateTime.Now.AddHours(1),
                     signingCredentials: creds
                 );
 
@@ -128,5 +227,17 @@ namespace Event.Service
 
             return jwt;
         }
+
+        private RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.Now.AddDays(7),
+            };
+
+            return refreshToken;
+        }
+
     }
 }

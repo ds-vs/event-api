@@ -1,6 +1,7 @@
 ﻿using Event.Domain.Entities;
 using Event.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Event.DAL.Repositories
 {
@@ -28,6 +29,13 @@ namespace Event.DAL.Repositories
                 .FirstOrDefaultAsync(entity => entity.Login == login);
 
             return entity!;
+        }
+
+        public async Task UpdateAsync(AccountEntity entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
         }
     }
 }
