@@ -11,7 +11,10 @@ namespace Event.DAL
         public DbSet<RoleEntity> Roles { get; set; }
 
         public EventDbContext(DbContextOptions<EventDbContext> options) 
-            : base(options) { }
+            : base(options) 
+        {
+            AppContext.SetSwitch(switchName: "Npgsql.EnableLegacyTimestampBehavior", isEnabled: true);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

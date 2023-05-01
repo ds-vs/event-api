@@ -22,5 +22,14 @@ namespace Event.Domain.Entities
 
         /// <summary> Статус проведения мероприятия. </summary>
         public StatusType Status { get; set; }
+
+        /// <summary> Идентификатор акаунта пользователя. </summary>
+        public Guid AccountId { get; set; }
+
+        /// <summary> Поле для связи One to many. </summary>
+        public AccountEntity? Account { get; set; }
+
+        /// <summary> Поле для связи Many to many. </summary>
+        public ICollection<AccountEntity>? Accounts { get; set;}
     }
 }

@@ -7,8 +7,8 @@ using System.Net;
 namespace Event.API.Controllers
 {
     /// <summary> Контроллер, работающий с AccountService. </summary>
-    [Route("api/")]
-    [ApiController]
+    [ApiController, Route("api/")]
+    [ApiExplorerSettings(GroupName = "Account")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -51,6 +51,9 @@ namespace Event.API.Controllers
             return BadRequest(response.Description);
         }
 
+        /// <summary> Обновить токен для учетной записи пользователя. </summary>
+        /// <remarks> Пример запроса: POST api/account/refreshtoken. </remarks> 
+        /// <returns> Токен. </returns>
         [HttpPost, Authorize, Route("account/refreshtoken")]
         public async Task<ActionResult<string>> RefreshTokenAsync()
         {
