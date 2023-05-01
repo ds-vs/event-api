@@ -12,6 +12,8 @@
 - SwaggerUI
 - Entity Framework Core
 - PostgreSQL
+- Moq
+- xUnit
 #### Архитектура:
 - [Clean architecture](https://learn.microsoft.com/ru-ru/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)
 - [Repositories](https://medium.com/net-core/repository-pattern-implementation-in-asp-net-core-21e01c6664d7)
