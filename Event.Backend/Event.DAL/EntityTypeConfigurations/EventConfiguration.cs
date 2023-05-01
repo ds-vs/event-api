@@ -2,6 +2,7 @@
 using Event.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace Event.DAL.EntityTypeConfigurations
 {
@@ -47,6 +48,21 @@ namespace Event.DAL.EntityTypeConfigurations
                 .HasColumnType(typeName: "int")
                 .HasDefaultValue(value: StatusType.Actual)
                 .HasConversion<int>();
+
+            builder.Property(propertyExpression: e => e.AccountId)
+                .HasColumnName(name: "account_id")
+                .HasColumnType(typeName: "uuid");
+
+            builder.HasOne(e => e.Account)
+                .WithMany(r => r.Events)
+                .HasForeignKey(e => e.AccountId);
+
+            builder.HasMany(e => e.Accounts)
+                .WithMany(e => e.EventsToAccounts)
+                .UsingEntity("accounts_to_events",
+                    l => l.HasOne(typeof(AccountEntity)).WithMany().HasForeignKey("account_id"),
+                    r => r.HasOne(typeof(EventEntity)).WithMany().HasForeignKey("event_id")
+                );
         }
     }
 }

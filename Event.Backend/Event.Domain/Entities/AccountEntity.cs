@@ -24,5 +24,9 @@
         public string? RefreshToken { get; set; } = string.Empty;
         public DateTime? TokenCreated { get; set; }
         public DateTime? TokenExpires { get; set; }
+
+        public ICollection<EventEntity>? Events { get; set; }
+        public ICollection<EventEntity>? EventsToAccounts { get; set; }
+
     }
 }

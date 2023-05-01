@@ -1,7 +1,6 @@
 ﻿using Event.Domain.Entities;
 using Event.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Event.DAL.Repositories
 {
