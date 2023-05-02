@@ -1,4 +1,5 @@
 ﻿using Event.Domain.Entities;
+using Event.Domain.Enums;
 using Event.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +42,13 @@ namespace Event.DAL.Repositories
             await _context.SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task UpdateEventStatusAsync(IQueryable<EventEntity> events)
+        {
+            events.ExecuteUpdate(e => e.SetProperty(p => p.Status, StatusType.Completed));
+
+            await _context.SaveChangesAsync();
         }
     }
 }

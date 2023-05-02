@@ -238,5 +238,20 @@ namespace Event.Service
                 };
             }
         }
+
+        public async Task UpdateEventStatusAsync()
+        {
+            try
+            {
+                var events = _eventRepository.Get()
+                    .Where(e => e.EventDate < DateTime.Now && e.Status == StatusType.Actual);
+
+                await _eventRepository.UpdateEventStatusAsync(events);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"[UpdateEventStatusAsync]: {e.Message}");
+            }
+        }
     }
 }
