@@ -19,6 +19,8 @@ namespace Event.Domain.Repositories.Interfaces
         /// <returns> <see cref="EventEntity"/>. </returns>
         Task<EventEntity> UpdateAsync(EventEntity entity);
 
+        Task UpdateEventStatusAsync(IQueryable<EventEntity> events);
+
         Task DeleteAsync(Guid id);
     }
 }
