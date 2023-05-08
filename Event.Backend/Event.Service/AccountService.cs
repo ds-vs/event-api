@@ -223,7 +223,7 @@ namespace Event.Service
                 (
                     Encoding.UTF8.GetBytes
                     (
-                        _configuration.GetSection("AppSettings:Token").Value!
+                        _configuration.GetSection("Jwt:SecretKey").Value!
                     )
                 );
 

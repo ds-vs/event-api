@@ -24,7 +24,7 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
         ValidateIssuer = false,
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(
-                builder.Configuration.GetSection("AppSettings:Token").Value!))
+                builder.Configuration.GetSection("Jwt:SecretKey").Value!))
     };
 });
 
