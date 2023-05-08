@@ -12,6 +12,7 @@
 - SwaggerUI
 - Entity Framework Core
 - PostgreSQL
+- BackgroundService
 - Moq
 - xUnit
 #### Архитектура:
@@ -53,5 +54,19 @@
 </details>
 
 ## Инструкция по запуску
-*тут будет инструкция по запуску*
+1. Запустить [Docker Desktop](https://www.docker.com/)
+2. Склонировать репозиторий
+3. Перейти в Event.Backend
+4. Выполнить команду: **docker-compose up -d**
+5. Перейти к документации: **https://localhost:5000/swagger/index.html**
 
+<details>
+<summary>Adminer</summary>
+
+- localhost:8080
+- Database: **PostgreSQL**
+- Server: **postgres_db**
+- User: **postgres**
+- Password: **postgres**
+
+</details>
