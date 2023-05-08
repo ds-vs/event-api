@@ -1,0 +1,48 @@
+version: '3.4'
+
+networks:
+  net:
+    driver: bridge
+
+services:
+  event.api:
+    image: ${DOCKER_REGISTRY-}eventapi
+    depends_on:
+      - "postgres_db"
+    container_name: event.api
+    build:
+      context: .
+      dockerfile: Event.API/Dockerfile
+    ports:
+      - "5000:443"
+      - "5001:80"
+    environment:
+      - ConnectionStrings__Pgsql=User ID=postgres;Password=postgres;Server=postgres_db;Port=5432;Database=events;
+    networks:
+      - net
+
+  postgres_db:
+    image: postgres
+    container_name: postgres.db
+    env_file:
+      - database.env
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - app_data:/var/lib/postgresql/data
+      - ./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
+    networks:
+      - net
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - net
+
+volumes:
+  app_data:     
