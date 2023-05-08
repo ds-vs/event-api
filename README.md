@@ -12,6 +12,9 @@
 - SwaggerUI
 - Entity Framework Core
 - PostgreSQL
+- BackgroundService
+- Moq
+- xUnit
 #### Архитектура:
 - [Clean architecture](https://learn.microsoft.com/ru-ru/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures)
 - [Repositories](https://medium.com/net-core/repository-pattern-implementation-in-asp-net-core-21e01c6664d7)
@@ -36,7 +39,7 @@
 - refresh_token - токен обновление (text);
 - token_created - дата и время создания токена (timestamp);
 - token_expires - дата и время истечения токена (timestamp);
-#### 3. Events - таблица для хранения о событиях.
+#### 3. Events - таблица для хранения информации о событиях.
 - event_id - уникальный идентификатор события (uuid);
 - title - наименование мероприятия (text);
 - date - дата проведения мероприятия (timestamp);
@@ -51,5 +54,19 @@
 </details>
 
 ## Инструкция по запуску
-*тут будет инструкция по запуску*
+1. Запустить [Docker Desktop](https://www.docker.com/)
+2. Склонировать репозиторий
+3. Перейти в Event.Backend
+4. Выполнить команду: **docker-compose up -d**
+5. Перейти к документации: **https://localhost:5000/swagger/index.html**
 
+<details>
+<summary>Adminer</summary>
+
+- localhost:8080
+- Database: **PostgreSQL**
+- Server: **postgres_db**
+- User: **postgres**
+- Password: **postgres**
+
+</details>
