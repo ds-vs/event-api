@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Event.API.Controllers
 {
-    /// <summary> Контроллер, работающий с AccountService. </summary>
     [ApiController, Route("api/")]
     [ApiExplorerSettings(GroupName = "Account")]
     public class AccountController : ControllerBase
@@ -22,6 +22,11 @@ namespace Event.API.Controllers
         [HttpPost, Route("account/register")]
         public async Task<IActionResult> RegisterAsync(RegisterAccountDto request)
         {
+            if (!ModelState.IsValid)
+            {
+                return Ok(request);
+            }
+
             var response = await _accountService.RegisterAsync(request);
 
             if (response.Status == HttpStatusCode.OK)
@@ -36,6 +41,11 @@ namespace Event.API.Controllers
         [HttpPost, Route("account/login")]
         public async Task<IActionResult> LoginAsync(LoginAccountDto request)
         {
+            if (!ModelState.IsValid)
+            {
+                return Ok(request);
+            }
+
             var response = await _accountService.LoginAsync(request);
 
             if (response.Status == HttpStatusCode.OK)
