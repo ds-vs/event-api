@@ -14,6 +14,17 @@ namespace Event.DAL.Repositories
             _context = context;
         }
 
+        public async Task CreateAccountToEventAsync(Guid accountId, Guid eventId)
+        {
+            var eventEntity = await _context.Events.Include(e => e.Accounts).FirstAsync(e => e.EventId == eventId);
+            var accountEntity = await _context.Account
+                .Include(x => x.Role)
+                .FirstAsync(e => e.AccountId == accountId);
+
+            eventEntity.Accounts.Add(accountEntity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<EventEntity> CreateAsync(EventEntity entity)
         {
             await _context.Events.AddAsync(entity);

@@ -33,6 +33,16 @@ namespace Event.API.Controllers
             return NotFound();
         }
 
+        [HttpPost, Route("event/subscribe"), Authorize(Roles = "Member")]
+        [ApiExplorerSettings(GroupName = "Guests")]
+        public async Task<IActionResult> SubscribeEvent(Guid id)
+        {
+            var login = User!.Identity!.Name;
+            var response = await _eventService.EventSubscribeAsync(login!, id);
+
+            return Ok(response.Description);
+        }
+
         /// <summary> Получить информацию о конкретном мероприятии. </summary>
         /// <remarks> Пример запроса: GET api/event/id. </remarks> 
         /// <param name="id"> Идентификатор мероприятия. </param>

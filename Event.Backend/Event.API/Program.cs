@@ -1,4 +1,4 @@
-using Event.API;
+using Event.API.BackgroundServices;
 using Event.DAL;
 using Event.DAL.Repositories;
 using Event.Domain.Repositories;
@@ -85,8 +85,10 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddHostedService<EventStatusUpdateHostedService>();
+builder.Services.AddHostedService<EmailNotificationService>();
 
 var app = builder.Build();
 

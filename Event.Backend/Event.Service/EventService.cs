@@ -253,5 +253,35 @@ namespace Event.Service
                 throw new Exception($"[UpdateEventStatusAsync]: {e.Message}");
             }
         }
+
+        public async Task<IResponse<bool>> EventSubscribeAsync(string login, Guid eventId)
+        {
+            try
+            {
+                var accountEntity = await _accountRepository.GetAsync(login);
+                var eventEntity = _eventRepository.Get().FirstOrDefault(x => x.EventId == eventId);
+
+                if (eventEntity == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                await _eventRepository.CreateAccountToEventAsync(accountEntity.AccountId, eventEntity.EventId);
+
+                return new Response<bool>()
+                {
+                    Description = "You have subscribed to an event.",
+                    Status = HttpStatusCode.OK,
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<bool>()
+                {
+                    Description = $"[EventSubscribeAsync] : {e.Message}",
+                    Status = HttpStatusCode.InternalServerError,
+                };
+            }
+        }
     }
 }
