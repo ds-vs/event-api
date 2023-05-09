@@ -6,9 +6,10 @@ namespace Event.Domain.Repositories.Interfaces
     {
         IQueryable<EventEntity> Get();
         Task<EventEntity> CreateAsync(EventEntity entity);
+        Task CreateAccountToEventAsync(Guid accountId, Guid eventId);
         Task<EventEntity> UpdateAsync(EventEntity entity);
         Task UpdateEventStatusAsync(IQueryable<EventEntity> events);
+        Task UpdateEventResponseAsync(EventEntity entity);
         Task DeleteAsync(Guid id);
-        Task CreateAccountToEventAsync(Guid accountId, Guid eventId);
     }
 }

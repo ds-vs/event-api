@@ -1,16 +1,14 @@
-﻿using Event.Service.Interfaces;
-
-namespace Event.API.BackgroundServices
+﻿namespace Event.API.BackgroundServices
 {
     public class EventStatusUpdateHostedService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConfiguration _configuration;
 
-        private readonly int _statusUpdateTimeInMilliseconds = 60_000;
-
-        public EventStatusUpdateHostedService(IServiceScopeFactory scopeFactory)
+        public EventStatusUpdateHostedService(IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
             _scopeFactory = scopeFactory;
+            _configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -31,7 +29,11 @@ namespace Event.API.BackgroundServices
                     Console.WriteLine($"{ex.Message}");
                 }
 
-                await Task.Delay(_statusUpdateTimeInMilliseconds, stoppingToken);
+                await Task.Delay(
+                    TimeSpan.FromMinutes(
+                        double.Parse(_configuration.GetSection("BackgroundServiceSettings:StatusUpdateDelayInMinutes").Value!)
+                    ), stoppingToken
+                );
             }
         }
     }

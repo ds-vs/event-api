@@ -100,6 +100,7 @@ namespace Event.Service
                     .Where(x => x.Status == StatusType.Actual)
                     .Select(x => new GetEventDto
                     {
+                        Id = x.EventId,
                         Title = x.Title,
                         Description = x.Description,
                         EventDate = x.EventDate,
@@ -133,6 +134,7 @@ namespace Event.Service
                     .Where(x => x.AccountId == user.AccountId)
                     .Select(x => new GetEventDto
                     {
+                        Id = x.EventId,
                         Title = x.Title,
                         Description = x.Description,
                         EventDate = x.EventDate,
@@ -167,6 +169,7 @@ namespace Event.Service
                 {
                     var eventDto = new GetEventDto
                     {
+                        Id = eventEntity.EventId,
                         Title = eventEntity.Title,
                         EventDate = eventEntity.EventDate,
                         Description = eventEntity.Description,
@@ -267,6 +270,9 @@ namespace Event.Service
                 }
 
                 await _eventRepository.CreateAccountToEventAsync(accountEntity.AccountId, eventEntity.EventId);
+                eventEntity.Responses++;
+                
+                await _eventRepository.UpdateEventResponseAsync(eventEntity);
 
                 return new Response<bool>()
                 {

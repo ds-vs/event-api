@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Event.DAL.EntityTypeConfigurations
 {
-    /// <summary> Создание конфигурации для <see cref="RoleEntity"/>. </summary>
+    /// <summary> Конфигурация для <see cref="RoleEntity"/>. </summary>
     public class RoleConfiguration : IEntityTypeConfiguration<RoleEntity>
     {
         public void Configure(EntityTypeBuilder<RoleEntity> builder)
@@ -29,6 +29,22 @@ namespace Event.DAL.EntityTypeConfigurations
                 .HasMaxLength(maxLength: 100)
                 .HasColumnType(typeName: "text")
                 .IsRequired();
+
+            builder.HasData 
+            (
+                new RoleEntity 
+                { 
+                    RoleId = 1, 
+                    Name = "Member", 
+                    Description = "Member" 
+                },
+                new RoleEntity
+                {
+                    RoleId = 2,
+                    Name = "Organizer",
+                    Description = "Organizer"
+                }
+            );
         }
     }
 }

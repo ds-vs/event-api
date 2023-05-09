@@ -1,6 +1,4 @@
-﻿using Event.Domain.Dto.Account;
-using Event.Service.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

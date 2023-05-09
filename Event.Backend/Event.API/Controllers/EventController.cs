@@ -1,12 +1,10 @@
 ﻿using Event.Domain.Dto.Event;
-using Event.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
 namespace Event.API.Controllers
 {
-    /// <summary> Контроллер, работающий с EventService. </summary>
     [Route("api/")]
     [ApiController]
     public class EventController : ControllerBase

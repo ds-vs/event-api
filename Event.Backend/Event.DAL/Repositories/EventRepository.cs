@@ -2,6 +2,7 @@
 using Event.Domain.Enums;
 using Event.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Event.DAL.Repositories
 {
@@ -21,7 +22,7 @@ namespace Event.DAL.Repositories
                 .Include(x => x.Role)
                 .FirstAsync(e => e.AccountId == accountId);
 
-            eventEntity.Accounts.Add(accountEntity);
+            eventEntity.Accounts!.Add(accountEntity);
             await _context.SaveChangesAsync();
         }
 
@@ -53,6 +54,13 @@ namespace Event.DAL.Repositories
             await _context.SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task UpdateEventResponseAsync(EventEntity entity)
+        {
+            _context.Entry(entity).Property(e => e.Responses).IsModified = true;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateEventStatusAsync(IQueryable<EventEntity> events)

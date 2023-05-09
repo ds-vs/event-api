@@ -1,0 +1,15 @@
+﻿global using Event.API.BackgroundServices;
+global using Event.DAL;
+global using Event.DAL.Repositories;
+global using Event.Domain.Repositories;
+global using Event.Domain.Repositories.Interfaces;
+global using Event.Service;
+global using Event.Service.Interfaces;
+global using Microsoft.AspNetCore.Mvc.Controllers;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.OpenApi.Models;
+global using Swashbuckle.AspNetCore.Filters;
+global using System.Reflection;
+global using System.Text;
+global using Event.Domain.Dto.Account;

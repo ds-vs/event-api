@@ -1,16 +1,14 @@
-﻿using Event.DAL;
-using Event.Service.Interfaces;
-using Microsoft.EntityFrameworkCore;
-
-namespace Event.API.BackgroundServices
+﻿namespace Event.API.BackgroundServices
 {
     public class EmailNotificationService: BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IConfiguration _configuration;
 
-        public EmailNotificationService(IServiceScopeFactory scopeFactory)
+        public EmailNotificationService(IServiceScopeFactory scopeFactory, IConfiguration configuration)
         {
             _scopeFactory = scopeFactory;
+            _configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -24,7 +22,6 @@ namespace Event.API.BackgroundServices
                         var context = scope.ServiceProvider.GetRequiredService<EventDbContext>();
                         var emailService = scope.ServiceProvider.GetRequiredService<INotificationService>();
 
-                        // Получения списка событий, которые начинаются на следующий день.
                         var upcomingEvents = await context.Events
                             .Include(e => e.Accounts)
                             .Where(e => e.EventDate.Day == DateTime.Now.AddDays(1).Day)
@@ -36,8 +33,8 @@ namespace Event.API.BackgroundServices
                             {
                                 await emailService.SendEmailAsync(
                                     subscriber.Email, 
-                                    "Уведомление о предстоящих событиях",
-                                    $"{upcomingEvent.Title} начнется {upcomingEvent.EventDate.ToString("f")}."
+                                    "Уведомление о предстоящем событии",
+                                    $"{upcomingEvent.Title} начнется {upcomingEvent.EventDate.ToString("g")}."
                                 );
                             }
                         }
@@ -48,7 +45,11 @@ namespace Event.API.BackgroundServices
                     Console.WriteLine($"{ex.Message}");
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
+                await Task.Delay(
+                    TimeSpan.FromMinutes(
+                        double.Parse(_configuration.GetSection("BackgroundServiceSettings:DelayNotificationInMinutes").Value!)
+                    ), stoppingToken
+                );
             }
         }
     }

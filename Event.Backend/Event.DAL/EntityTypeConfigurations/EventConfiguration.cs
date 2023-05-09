@@ -2,11 +2,10 @@
 using Event.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace Event.DAL.EntityTypeConfigurations
 {
-    /// <summary> Создание конфигурации для <see cref="EventEntity"/>. </summary>
+    /// <summary> Конфигурация для <see cref="EventEntity"/>. </summary>
     public class EventConfiguration : IEntityTypeConfiguration<EventEntity>
     {
         public void Configure(EntityTypeBuilder<EventEntity> builder)

@@ -1,18 +1,3 @@
-using Event.API.BackgroundServices;
-using Event.DAL;
-using Event.DAL.Repositories;
-using Event.Domain.Repositories;
-using Event.Domain.Repositories.Interfaces;
-using Event.Service;
-using Event.Service.Interfaces;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
-using System.Text;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication().AddJwtBearer(options =>
