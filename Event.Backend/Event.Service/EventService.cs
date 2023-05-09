@@ -264,6 +264,23 @@ namespace Event.Service
                 var accountEntity = await _accountRepository.GetAsync(login);
                 var eventEntity = _eventRepository.Get().FirstOrDefault(x => x.EventId == eventId);
 
+                var entites = await _eventRepository.GetAccountToEntityAsync();
+
+                foreach (var e in entites)
+                {
+                    foreach (var a in e.Accounts!)
+                    {
+                        if (a.AccountId == accountEntity.AccountId)
+                        {
+                            return new Response<bool>()
+                            {
+                                Description = "You are already subscribed to this event.",
+                                Status = HttpStatusCode.OK,
+                            };
+                        }
+                    }
+                }
+
                 if (eventEntity == null)
                 {
                     throw new NullReferenceException();
@@ -285,6 +302,100 @@ namespace Event.Service
                 return new Response<bool>()
                 {
                     Description = $"[EventSubscribeAsync] : {e.Message}",
+                    Status = HttpStatusCode.InternalServerError,
+                };
+            }
+        }
+
+        public async Task<IResponse<bool>> EventUnsubscribeAsync(string login, Guid eventId)
+        {
+            try
+            {
+                var accountEntity = await _accountRepository.GetAsync(login);
+                var eventEntity = _eventRepository.Get().FirstOrDefault(x => x.EventId == eventId);
+
+                var entites = await _eventRepository.GetAccountToEntityAsync();
+
+                foreach (var e in entites)
+                {
+                    if(!e.Accounts!.Select(x => x.AccountId).Contains(accountEntity.AccountId))
+                    {
+                        return new Response<bool>()
+                        {
+                            Description = "You are not subscribed to this event.",
+                            Status = HttpStatusCode.OK,
+                        };
+                    }
+                }
+
+                if (eventEntity == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                await _eventRepository.DeleteAccountToEventAsync(accountEntity.AccountId, eventEntity.EventId);
+                eventEntity.Responses--;
+
+                await _eventRepository.UpdateEventResponseAsync(eventEntity);
+
+                return new Response<bool>()
+                {
+                    Description = "You have unsubscribed from the event.",
+                    Status = HttpStatusCode.OK,
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<bool>()
+                {
+                    Description = $"[EventUnsubscribeAsync] : {e.Message}",
+                    Status = HttpStatusCode.InternalServerError,
+                };
+            }
+        }
+
+        public async Task<IResponse<IEnumerable<GetEventDto>>> GetSubscriptions(string login)
+        {
+            try
+            {
+                var accountEntity = await _accountRepository.GetAsync(login);
+                var entites = await _eventRepository.GetAccountToEntityAsync();
+
+                var currentAccountSubscriptions = new List<GetEventDto>();
+
+                foreach (var e in entites)
+                {
+                    foreach (var a in e.Accounts!)
+                    {
+                        if (a.AccountId == accountEntity.AccountId)
+                        {
+                            currentAccountSubscriptions.Add
+                            (
+                                new GetEventDto()
+                                {
+                                    Id = e.EventId,
+                                    Title = e.Title,
+                                    Description = e.Description,
+                                    EventDate = e.EventDate,
+                                    Responses = e.Responses,
+                                    Status = e.Status,
+                                }
+                            );
+                        }
+                    }
+                }
+
+                return new Response<IEnumerable<GetEventDto>>()
+                {
+                    Data = currentAccountSubscriptions,
+                    Status = HttpStatusCode.OK,
+                };
+            }
+            catch (Exception e)
+            {
+                return new Response<IEnumerable<GetEventDto>>()
+                {
+                    Description = $"[GetSubscriptions] : {e.Message}",
                     Status = HttpStatusCode.InternalServerError,
                 };
             }

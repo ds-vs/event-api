@@ -11,7 +11,9 @@ namespace Event.Service.Interfaces
         Task<IResponse<GetEventDto>> CreateEventAsync(string login, CreateEventDto eventDto);
         Task<IResponse<GetEventDto>> UpdateEventAsync(string login, Guid id, CreateEventDto eventDto);
         Task UpdateEventStatusAsync();
+        Task<IResponse<IEnumerable<GetEventDto>>> GetSubscriptions(string login);
         Task<IResponse<bool>> EventSubscribeAsync(string login, Guid eventId);
+        Task<IResponse<bool>> EventUnsubscribeAsync(string login, Guid eventId);
         Task<IResponse<GetEventDto>> DeleteEventAsync(string login, Guid id);
     }
 }

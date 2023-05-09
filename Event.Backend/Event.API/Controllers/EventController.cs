@@ -31,14 +31,46 @@ namespace Event.API.Controllers
             return NotFound();
         }
 
-        [HttpPost, Route("event/subscribe"), Authorize(Roles = "Member")]
+        [HttpPost, Route("event/subscribe/id"), Authorize(Roles = "Member")]
         [ApiExplorerSettings(GroupName = "Guests")]
         public async Task<IActionResult> SubscribeEvent(Guid id)
         {
             var login = User!.Identity!.Name;
             var response = await _eventService.EventSubscribeAsync(login!, id);
 
-            return Ok(response.Description);
+            if(response.Status == HttpStatusCode.OK)
+            {
+                return Ok(response.Description);
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete, Route("event/unsubscribe/id"), Authorize(Roles = "Member")]
+        [ApiExplorerSettings(GroupName = "Guests")]
+        public async Task<IActionResult> UnsubscribeEvent(Guid id)
+        {
+            var login = User!.Identity!.Name;
+            var response = await _eventService.EventUnsubscribeAsync(login!, id);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                return Ok(response.Description);
+            }
+            return BadRequest();
+        }
+
+        [HttpGet, Route("event/subscriptions"), Authorize(Roles = "Member")]
+        [ApiExplorerSettings(GroupName = "Guests")]
+        public async Task<IActionResult> GetSubscriptions()
+        {
+            var login = User!.Identity!.Name;
+            var response = await _eventService.GetSubscriptions(login!);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                return Ok(response.Data);
+            }
+            return BadRequest();
         }
 
         /// <summary> Получить информацию о конкретном мероприятии. </summary>

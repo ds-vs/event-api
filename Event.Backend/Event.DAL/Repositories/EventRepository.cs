@@ -2,7 +2,6 @@
 using Event.Domain.Enums;
 using Event.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Event.DAL.Repositories
 {
@@ -17,12 +16,29 @@ namespace Event.DAL.Repositories
 
         public async Task CreateAccountToEventAsync(Guid accountId, Guid eventId)
         {
-            var eventEntity = await _context.Events.Include(e => e.Accounts).FirstAsync(e => e.EventId == eventId);
+            var eventEntity = await _context.Events
+                .Include(e => e.Accounts)
+                .FirstAsync(e => e.EventId == eventId);
+
             var accountEntity = await _context.Account
                 .Include(x => x.Role)
                 .FirstAsync(e => e.AccountId == accountId);
 
             eventEntity.Accounts!.Add(accountEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAccountToEventAsync(Guid accountId, Guid eventId)
+        {
+            var eventEntity = await _context.Events
+                .Include(e => e.Accounts)
+                .FirstAsync(e => e.EventId == eventId);
+
+            var accountEntity = await _context.Account
+                .Include(x => x.Role)
+                .FirstAsync(e => e.AccountId == accountId);
+
+            eventEntity.Accounts!.Remove(accountEntity);
             await _context.SaveChangesAsync();
         }
 
@@ -68,6 +84,12 @@ namespace Event.DAL.Repositories
             events.ExecuteUpdate(e => e.SetProperty(p => p.Status, StatusType.Completed));
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<EventEntity>> GetAccountToEntityAsync()
+        {
+            return await _context.Events.Include(e => e.Accounts)
+                .ToListAsync();
         }
     }
 }
