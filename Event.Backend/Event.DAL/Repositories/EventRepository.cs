@@ -14,6 +14,34 @@ namespace Event.DAL.Repositories
             _context = context;
         }
 
+        public async Task CreateAccountToEventAsync(Guid accountId, Guid eventId)
+        {
+            var eventEntity = await _context.Events
+                .Include(e => e.Accounts)
+                .FirstAsync(e => e.EventId == eventId);
+
+            var accountEntity = await _context.Account
+                .Include(x => x.Role)
+                .FirstAsync(e => e.AccountId == accountId);
+
+            eventEntity.Accounts!.Add(accountEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAccountToEventAsync(Guid accountId, Guid eventId)
+        {
+            var eventEntity = await _context.Events
+                .Include(e => e.Accounts)
+                .FirstAsync(e => e.EventId == eventId);
+
+            var accountEntity = await _context.Account
+                .Include(x => x.Role)
+                .FirstAsync(e => e.AccountId == accountId);
+
+            eventEntity.Accounts!.Remove(accountEntity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<EventEntity> CreateAsync(EventEntity entity)
         {
             await _context.Events.AddAsync(entity);
@@ -44,11 +72,24 @@ namespace Event.DAL.Repositories
             return entity;
         }
 
+        public async Task UpdateEventResponseAsync(EventEntity entity)
+        {
+            _context.Entry(entity).Property(e => e.Responses).IsModified = true;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateEventStatusAsync(IQueryable<EventEntity> events)
         {
             events.ExecuteUpdate(e => e.SetProperty(p => p.Status, StatusType.Completed));
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<EventEntity>> GetAccountToEntityAsync()
+        {
+            return await _context.Events.Include(e => e.Accounts)
+                .ToListAsync();
         }
     }
 }

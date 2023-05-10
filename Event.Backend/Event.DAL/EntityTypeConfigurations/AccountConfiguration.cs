@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Event.DAL.EntityTypeConfigurations
 {
-    /// <summary> Создание конфигурации для <see cref="AccountEntity"/>. </summary>
+    /// <summary> Конфигурация для <see cref="AccountEntity"/>. </summary>
     public class AccountConfiguration : IEntityTypeConfiguration<AccountEntity>
     {
         public void Configure(EntityTypeBuilder<AccountEntity> builder)

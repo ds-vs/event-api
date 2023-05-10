@@ -2,7 +2,6 @@
 
 namespace Event.Domain
 {
-    /// <summary> Ответ возвращаемый из методов сервисов. </summary>
     public class Response<T> : IResponse<T>
     {
         public T? Data { get; set; }

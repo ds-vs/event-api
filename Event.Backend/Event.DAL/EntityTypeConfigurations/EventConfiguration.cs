@@ -2,11 +2,10 @@
 using Event.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace Event.DAL.EntityTypeConfigurations
 {
-    /// <summary> Создание конфигурации для <see cref="EventEntity"/>. </summary>
+    /// <summary> Конфигурация для <see cref="EventEntity"/>. </summary>
     public class EventConfiguration : IEntityTypeConfiguration<EventEntity>
     {
         public void Configure(EntityTypeBuilder<EventEntity> builder)
@@ -52,6 +51,12 @@ namespace Event.DAL.EntityTypeConfigurations
             builder.Property(propertyExpression: e => e.AccountId)
                 .HasColumnName(name: "account_id")
                 .HasColumnType(typeName: "uuid");
+
+            builder.Property(propertyExpression: e => e.Address)
+                .HasColumnName(name: "address")
+                .HasColumnType(typeName: "text")
+                .HasMaxLength(maxLength: 80)
+                .IsRequired();
 
             builder.HasOne(e => e.Account)
                 .WithMany(r => r.Events)

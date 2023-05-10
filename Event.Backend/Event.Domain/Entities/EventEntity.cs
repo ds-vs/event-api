@@ -2,16 +2,12 @@
 
 namespace Event.Domain.Entities
 {
-    /// <summary> Сущность описывающая мероприятие. </summary>
     public class EventEntity
     {
-        /// <summary> Уникальный идентификатор мероприятия. </summary>
         public Guid EventId { get; set; }
 
-        /// <summary> Название (заголовок) мероприятия. </summary>
         public string Title { get; set; } = string.Empty;
 
-        /// <summary> Описание мероприятия. </summary>
         public string Description { get; set; } = string.Empty;
 
         /// <summary> Количество человек отметивших мероприятие (дали отклик на событие). </summary>
@@ -23,7 +19,8 @@ namespace Event.Domain.Entities
         /// <summary> Статус проведения мероприятия. </summary>
         public StatusType Status { get; set; }
 
-        /// <summary> Идентификатор акаунта пользователя. </summary>
+        public string Address { get; set; } = string.Empty;
+
         public Guid AccountId { get; set; }
 
         /// <summary> Поле для связи One to many. </summary>

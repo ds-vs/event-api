@@ -178,14 +178,12 @@ namespace Event.Service
 
                 string token = CreateToken(entity);
 
-                // Генерация нового токена.
                 var newRefreshToken = GenerateRefreshToken();
 
                 entity.RefreshToken = newRefreshToken.Token;
                 entity.TokenCreated = newRefreshToken.Created;
                 entity.TokenExpires = newRefreshToken.Expires;
 
-                // Обновление хранимого токена в БД.
                 await _accountRepository.UpdateAsync(entity);
 
                 return new Response<TokenDto>()
