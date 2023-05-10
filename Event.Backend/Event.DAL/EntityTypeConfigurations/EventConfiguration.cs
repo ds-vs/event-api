@@ -52,6 +52,12 @@ namespace Event.DAL.EntityTypeConfigurations
                 .HasColumnName(name: "account_id")
                 .HasColumnType(typeName: "uuid");
 
+            builder.Property(propertyExpression: e => e.Address)
+                .HasColumnName(name: "address")
+                .HasColumnType(typeName: "text")
+                .HasMaxLength(maxLength: 80)
+                .IsRequired();
+
             builder.HasOne(e => e.Account)
                 .WithMany(r => r.Events)
                 .HasForeignKey(e => e.AccountId);

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace Event.API.Controllers
 {
@@ -16,9 +15,17 @@ namespace Event.API.Controllers
             _accountService = accountService;
         }
 
-        /// <summary> Создать учетную запись пользователя. </summary>
-        /// <remarks> Пример запроса: POST api/account/register. </remarks> 
-        /// <returns> Сообщение о создании учетной записи. </returns>
+        /// <summary> Создать аккаунт пользователя. </summary>
+        /// <remarks> 
+        /// POST api/account/register
+        /// {
+        ///     "login": String,
+        ///     "email": String,
+        ///     "password": String,
+        ///     "roleId": Number,
+        /// }
+        /// </remarks> 
+        /// <returns> Аккаунт создан. </returns>
         [HttpPost, Route("account/register")]
         public async Task<IActionResult> RegisterAsync(RegisterAccountDto request)
         {
@@ -35,8 +42,14 @@ namespace Event.API.Controllers
             return BadRequest();
         }
 
-        /// <summary> Сгенерировать токен для учетной записи пользователя. </summary>
-        /// <remarks> Пример запроса: POST api/account/login. </remarks> 
+        /// <summary> Создать токен для авторизации. </summary>
+        /// <remarks> 
+        /// POST api/account/login
+        /// {
+        ///     "login": String,
+        ///     "password: String
+        /// }
+        /// </remarks> 
         /// <returns> Токен. </returns>
         [HttpPost, Route("account/login")]
         public async Task<IActionResult> LoginAsync(LoginAccountDto request)
@@ -59,15 +72,15 @@ namespace Event.API.Controllers
             return BadRequest(response.Description);
         }
 
-        /// <summary> Обновить токен для учетной записи пользователя. </summary>
-        /// <remarks> Пример запроса: POST api/account/refreshtoken. </remarks> 
-        /// <returns> Токен. </returns>
+        /// <summary> Создать новый токен обновления. </summary>
+        /// <remarks> POST api/account/refreshtoken. </remarks> 
+        /// <returns> Токен обновления. </returns>
         [HttpPost, Authorize, Route("account/refreshtoken")]
         public async Task<ActionResult<string>> RefreshTokenAsync()
         {
             var login = User?.Identity?.Name;
 
-            var response = await _accountService.GetRefreshTokenAsync(login);
+            var response = await _accountService.GetRefreshTokenAsync(login!);
             var refreshToken = Request.Cookies["refreshToken"];
 
             if (response.Status == HttpStatusCode.OK)
@@ -77,7 +90,7 @@ namespace Event.API.Controllers
                 else if (response.Data.TokenExpires < DateTime.Now)
                     return Unauthorized("Token expired.");
 
-                response = await _accountService.NewRefreshTokenAsync(login);
+                response = await _accountService.NewRefreshTokenAsync(login!);
 
                 if (response.Status == HttpStatusCode.OK)
                 {

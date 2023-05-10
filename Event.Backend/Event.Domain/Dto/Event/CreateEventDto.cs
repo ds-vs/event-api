@@ -4,6 +4,7 @@
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public DateTime EventDate { get; set; } = DateTime.Now;
+        public DateTime EventDate { get; set; } = DateTime.Today;
+        public string Address { get; set; } = string.Empty;
     }
 }

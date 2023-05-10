@@ -19,6 +19,8 @@ namespace Event.Domain.Entities
         /// <summary> Статус проведения мероприятия. </summary>
         public StatusType Status { get; set; }
 
+        public string Address { get; set; } = string.Empty;
+
         public Guid AccountId { get; set; }
 
         /// <summary> Поле для связи One to many. </summary>

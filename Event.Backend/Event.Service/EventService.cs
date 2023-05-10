@@ -6,6 +6,7 @@ using Event.Domain.Enums;
 using Event.Domain.Repositories;
 using Event.Domain.Repositories.Interfaces;
 using Event.Service.Interfaces;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 
 namespace Event.Service
 {
@@ -34,6 +35,7 @@ namespace Event.Service
                     EventDate = eventDto.EventDate,
                     Status = StatusType.Actual,
                     AccountId = user.AccountId,
+                    Address = eventDto.Address,
                 };
 
                 await _eventRepository.CreateAsync(entity);
@@ -77,7 +79,7 @@ namespace Event.Service
 
                 return new Response<GetEventDto>()
                 {
-                    Description = "The event was successfully deleted. ",
+                    Description = "The event was successfully deleted.",
                     Status = HttpStatusCode.OK,
                 };
             }
@@ -106,6 +108,7 @@ namespace Event.Service
                         EventDate = x.EventDate,
                         Responses = x.Responses,
                         Status = x.Status,
+                        Address = x.Address,
                     });
 
                 return new Response<IEnumerable<GetEventDto>>()
@@ -140,6 +143,7 @@ namespace Event.Service
                         EventDate = x.EventDate,
                         Responses = x.Responses,
                         Status = x.Status,
+                        Address = x.Address,
                     });
 
                 return new Response<IEnumerable<GetEventDto>>()
@@ -175,6 +179,7 @@ namespace Event.Service
                         Description = eventEntity.Description,
                         Responses = eventEntity.Responses,
                         Status = eventEntity.Status,
+                        Address = eventEntity.Address,
                     };
 
                     return new Response<GetEventDto>()
@@ -214,6 +219,7 @@ namespace Event.Service
                     entity.Title = eventDto.Title;
                     entity.Description = eventDto.Description;
                     entity.EventDate = eventDto.EventDate;
+                    entity.Address = eventDto.Address;
 
                     await _eventRepository.UpdateAsync(entity);
                 }
@@ -312,25 +318,22 @@ namespace Event.Service
             try
             {
                 var accountEntity = await _accountRepository.GetAsync(login);
-                var eventEntity = _eventRepository.Get().FirstOrDefault(x => x.EventId == eventId);
-
                 var entites = await _eventRepository.GetAccountToEntityAsync();
 
-                foreach (var e in entites)
-                {
-                    if(!e.Accounts!.Select(x => x.AccountId).Contains(accountEntity.AccountId))
-                    {
-                        return new Response<bool>()
-                        {
-                            Description = "You are not subscribed to this event.",
-                            Status = HttpStatusCode.OK,
-                        };
-                    }
-                }
+                var eventEntity = entites.FirstOrDefault(x => x.EventId == eventId);
+
 
                 if (eventEntity == null)
                 {
                     throw new NullReferenceException();
+                }
+                if(eventEntity.Accounts!.FirstOrDefault(x => x.AccountId == accountEntity.AccountId) == null)
+                {
+                    return new Response<bool>()
+                    {
+                        Description = "You are not subscribed to this event.",
+                        Status = HttpStatusCode.OK,
+                    };
                 }
 
                 await _eventRepository.DeleteAccountToEventAsync(accountEntity.AccountId, eventEntity.EventId);
@@ -379,6 +382,7 @@ namespace Event.Service
                                     EventDate = e.EventDate,
                                     Responses = e.Responses,
                                     Status = e.Status,
+                                    Address = e.Address,
                                 }
                             );
                         }
